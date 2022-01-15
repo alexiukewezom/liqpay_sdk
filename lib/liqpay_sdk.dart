@@ -42,7 +42,7 @@ class LiqPay {
     required String path,
     required Map<String, dynamic> params,
   }) async {
-    if (params['version']==null) throw Exception('version is mull');
+    if (!params.containsKey('version')) throw Exception('version is mull');
 
     params['public_key'] = publicKey;
     final data = base64.encode(utf8.encode(json.encode(params)));
