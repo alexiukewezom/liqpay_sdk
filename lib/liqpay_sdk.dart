@@ -89,7 +89,7 @@ class LiqPay {
   }
 
   Map<String, dynamic> cnbParams(Map<String, dynamic> params) {
-    params['public_key'] = publicKey;
+    params["public_key"] = publicKey;
 
     if (params['version'] == null) throw Exception('version is null');
     if (params['amount'] == null) throw Exception('amount is null');
@@ -107,6 +107,6 @@ class LiqPay {
     params = cnbParams(params);
     final String data = base64.encode(utf8.encode(json.encode(params)));
     final String signature = strToSign(privateKey + data + privateKey);
-    return {'data': data, 'signature': signature};
+    return {"data": data, "signature": signature};
   }
 }
