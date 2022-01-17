@@ -2,7 +2,8 @@ library liqpay_sdk;
 
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+
 
 /// Liqpay Payment Module
 ///
@@ -38,7 +39,7 @@ class LiqPay {
 
   /// Call API
 
-  Future<Map<String, dynamic>> api({
+  Future<dynamic> api({
     required String path,
     required Map<String, dynamic> params,
   }) async {
@@ -47,19 +48,18 @@ class LiqPay {
     params['public_key'] = publicKey;
     final data = base64.encode(utf8.encode(json.encode(params)));
     final signature = strToSign(privateKey + data + privateKey);
-
-    final response = await http.post(
-      Uri.parse(host + path),
-      body: json.encode({
-        'form': {
-          'data': data,
-          'signature': signature,
+    final response = await Dio().post(
+     host + path,
+      data: FormData.fromMap({
+        "form": {
+          "data": data,
+          "signature": signature,
         },
-      }),
+      })
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return response;
     } else {
       throw Exception(response);
     }
