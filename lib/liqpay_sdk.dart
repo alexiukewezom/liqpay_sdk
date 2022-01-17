@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 
-
 /// Liqpay Payment Module
 ///
 /// NOTICE OF LICENSE
@@ -48,15 +47,11 @@ class LiqPay {
     params['public_key'] = publicKey;
     final data = base64.encode(utf8.encode(json.encode(params)));
     final signature = strToSign(privateKey + data + privateKey);
-    final response = await Dio().post(
-     host + path,
-      data: FormData.fromMap({
-        "form": {
+    final response = await Dio().post(host + path,
+        data: FormData.fromMap({
           "data": data,
           "signature": signature,
-        },
-      })
-    );
+        }));
 
     if (response.statusCode == 200) {
       return response;
